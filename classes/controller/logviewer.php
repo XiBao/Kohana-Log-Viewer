@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class Controller_Logs extends Controller {
+class Controller_Logviewer extends Controller {
 
     /**
      * @var View
@@ -15,7 +15,7 @@ class Controller_Logs extends Controller {
 
     function before()
     {
-        $this->layout = new View('logs/layout');
+        $this->layout = new View('logviewer/layout');
         $this->_logDir = Kohana::$config->load('logviewer.log_path');
 
         $today = getdate();
@@ -37,7 +37,7 @@ class Controller_Logs extends Controller {
             $this->layout->set('content', $this->_getLogReport($this->_level));
 
         } else {
-            $this->layout->set('content', $this->_createMessage("<b>No accessible log files!</b> Check if you've enabled logging in bootstrap.", 'error' ));
+            $this->layout->set('content', $this->_createMessage("<strong>No accessible log files!</strong> Check if you've enabled logging in bootstrap.", 'alert-warning' ));
         }
 
         $this->response->body($this->layout);
@@ -48,9 +48,9 @@ class Controller_Logs extends Controller {
         $logfile = "/$this->_year/$this->_month/" . $this->request->param('logfile');
 
         if(@unlink($this->_logDir .'/'. $logfile)){
-            $this->layout->set('content', $this->_createMessage("<b>File deleted successfully!</b>", 'success' ));
+            $this->layout->set('content', $this->_createMessage("<strong>File deleted successfully!</strong>", 'alert-success' ));
         } else {
-            $this->layout->set('content', $this->_createMessage("<b>File ({$logfile}) deleting failed!</b> Is this file really exist?", 'error' ));
+            $this->layout->set('content', $this->_createMessage("<strong>File ({$logfile}) deleting failed!</strong> Is this file really exist?", 'alert-error' ));
         }
 
         $this->_setLayoutVars();
@@ -114,13 +114,13 @@ class Controller_Logs extends Controller {
             $title  = "Log Report - {$this->_year}/{$this->_month}/{$this->_day}";
             $title .= ' <small>'. (($this->_level)? " {$this->_level}" : ' All'). ' Logs</small>';
             
-            return View::factory('logs/report', array(
+            return View::factory('logviewer/report', array(
                       'logs' => $logsEntries,
                       'header' => $title
                     ));
             //return $this->_createMessage("<b>File found!</b> Beautiful report coming soon.", 'success');
         } else {
-            return $this->_createMessage("<b>No log file found for {$this->_year}/{$this->_month}/{$this->_day}!</b> Please select a Log file from left sidebar.", 'warning');
+            return $this->_createMessage("<strong>No log file found for {$this->_year}/{$this->_month}/{$this->_day}!</strong> Please select a Log file from left sidebar.", 'alert-warning');
         }
     }
 
@@ -133,7 +133,7 @@ class Controller_Logs extends Controller {
      */
     private function _createMessage($message, $type)
     {
-        return "<div class=\"alert-message {$type}\"><p>{$message}</p></i></div>";
+        return "<div class=\"alert {$type}\"><p>{$message}</p></i></div>";
     }
 
 

@@ -4,13 +4,16 @@
 if (Kohana::$is_cli)
 	return;
 
-Route::set('logdelete', 'logs/delete/<year>/<month>/<logfile>', array('logfile' => '.*'))
+Route::set('logdelete', 'logviewer/delete/<year>/<month>/<logfile>', array('logfile' => '.*'))
+    ->subdomains(array('sem'))
 	->defaults(array(
-		'controller' => 'logs',
+		'controller' => 'logviewer',
 		'action'     => 'delete',
 	));
-Route::set('logviewer', 'logs/(<year>(/<month>(/<day>(/<level>))))')
+
+Route::set('logviewer', 'logviewer/(<year>(/<month>(/<day>(/<level>))))')
+    ->subdomains(array('sem'))
 	->defaults(array(
-		'controller' => 'logs',
+		'controller' => 'logviewer',
 		'action'     => 'index',
 	));

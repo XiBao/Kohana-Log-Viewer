@@ -63,7 +63,7 @@ class Model_Logreport{
 			
 			if (stripos($logRaw, 'STRACE') !== FALSE) {
 				$message = Arr::get($this->_logEntries[$last_log], 'message');
-				$this->_logEntries[$last_log]['message'] =  $message . '<br/><br/><p>Stack Trace:</p><ol style="font-family:consolas;font-size:8pt">';
+				$this->_logEntries[$last_log]['message'] =  $message . '<br/><br/><p>Stack Trace:</p><pre><ol style="font-family:consolas;">';
 			}
 			
 			if ($logRaw[0] == '#') {
@@ -72,7 +72,7 @@ class Model_Logreport{
 			}
 			
 			if (preg_match('/\{main\}/', $logRaw)) {
-				$this->_logEntries[$last_log]['message'] .= '</ol>';
+				$this->_logEntries[$last_log]['message'] .= '</ol></pre>';
 			}
         }
     }
@@ -82,18 +82,18 @@ class Model_Logreport{
         switch($level){
             case self::$levels[LOG_WARNING]:
             case self::$levels[LOG_DEBUG]:
-                return 'warning';
+                return 'label-warning';
                 break;
             case self::$levels[LOG_ERR]:
             case self::$levels[LOG_CRIT]:
             case self::$levels[LOG_EMERG]:
-                return 'important';
+                return 'label-important';
             break;
             case self::$levels[LOG_NOTICE]:
-                return 'notice';
+                return 'label-default';
             break;
             case self::$levels[LOG_INFO]:
-                return 'success';
+                return 'label-info';
             break;
             default: '';
         }
