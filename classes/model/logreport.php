@@ -44,7 +44,6 @@ class Model_Logreport{
 			$logRaw = trim($logRaw);
 			if ($logRaw != '--' && $logRaw[0] != '#' && stripos($logRaw, 'STRACE') === FALSE) {
 				preg_match($pattern, $logRaw, $matches);
-
 				$log = array();
 				$log['raw'] = $logRaw;
 				if($matches) { 
@@ -68,6 +67,7 @@ class Model_Logreport{
 			
 			if ($logRaw[0] == '#') {
 				$logRaw = preg_replace('/#\d /', '', $logRaw);
+				if (!isset($this->_logEntries[$last_log]['message'])) $this->_logEntries[$last_log]['message'] = '';
 				$this->_logEntries[$last_log]['message'] .= '<li>'.$logRaw . '</li>';
 			}
 			
